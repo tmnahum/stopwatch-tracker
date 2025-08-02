@@ -122,6 +122,20 @@ function createTinyBaseStore(
 const roomId = new URLSearchParams(window.location.search).get('room');
 const newMerge = new URLSearchParams(window.location.search).get('newMerge') === 'true';
 
+// @ts-ignore
+const umami = window.umami;
+if (umami) {
+    if (roomId) {
+        umami.track('viewed_custom_room', {roomId});
+    }
+    else {
+        umami.track('viewed_default_room');
+    }
+    if (newMerge) {
+        umami.track('new_merge_enabled', {roomId});
+    }
+}
+
 
 const {store, indexes, persister, UiReactWithSchemas} = roomId ? createTinyBaseStore({sync: true, roomId}) : createTinyBaseStore({sync: false, roomId:'local'})
 // todo add a share button
